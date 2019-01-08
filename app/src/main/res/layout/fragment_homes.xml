@@ -6,9 +6,9 @@
     tools:context=".HomesFragment"
     android:orientation="vertical">
     <ListView
+        android:layout_weight="8"
         android:id="@+id/lv_homes_saved"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
-
 </LinearLayout>

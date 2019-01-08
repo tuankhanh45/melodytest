@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomesFragment">
-    <TextView
+    tools:context=".HomesFragment"
+    android:orientation="vertical">
+    <Button
+        android:id="@+id/btn_save_sqlite"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="save home to sqlite"/>
+    <Button
+        android:id="@+id/btn_delete_sqlite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="delete all home in sqlite"/>
+    <Button
+        android:id="@+id/btn_show_sqlite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="show home to sqlite"/>
+    <ListView
+        android:layout_weight="8"
+        android:id="@+id/lv_homes_saved"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
 
-</FrameLayout>
+</LinearLayout>

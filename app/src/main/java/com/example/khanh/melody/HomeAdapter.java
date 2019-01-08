@@ -14,17 +14,20 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class HomeAdapter extends BaseAdapter {
-    ArrayList <Home> homeArrayList ;
+    ArrayList<Home> homeArrayList;
     Context mContext;
+
     public HomeAdapter(ArrayList<Home> data, Context context) {
         this.homeArrayList = data;
         this.mContext = context;
     }
+
     private static class ViewHolder {
         TextView txtPrice;
         TextView txtDescription;
         ImageView imgHome;
     }
+
     @Override
     public int getCount() {
         return homeArrayList.size();
@@ -62,12 +65,14 @@ public class HomeAdapter extends BaseAdapter {
         }
 
         Home item = (Home) getItem(position);
-    String a =item.getUrlImg();
+        String a = item.getUrlImg();
         viewHolder.txtPrice.setText(item.getPrice());
         viewHolder.txtDescription.setText(item.getDescription());
         if (!item.getUrlImg().equals("")) {
 
             Picasso.with(mContext).load(item.getUrlImg()).into(viewHolder.imgHome);
+        } else {
+            viewHolder.imgHome.setImageResource(R.drawable.ic_launcher_background);
         }
         return result;
     }

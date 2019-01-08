@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import static com.example.khanh.melody.Link.PORT;
 public class HomesFragment extends Fragment {
 
     ListView lvHomeSave;
+
     HomeAdapter homeAdapter;
     ArrayList<Home> homeArrayList;
 
@@ -35,9 +37,11 @@ public class HomesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_homes, container, false);
         lvHomeSave = (ListView) view.findViewById(R.id.lv_homes_saved);
+
         homeArrayList = new ArrayList<>();
         //creat arrlist home
         new GetList().execute(PORT + "/api/estate/user-history/20/1", "GET", "");
+
         return view;
     }
 

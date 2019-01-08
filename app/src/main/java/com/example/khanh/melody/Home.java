@@ -4,6 +4,31 @@ public class Home {
     private String price;
     private String description;
     private String urlImg;
+    private String homeId;
+
+    public Home() {
+
+    }
+
+    public Home(String homeId, String price, String description, String urlImg) {
+        this.homeId = homeId;
+        this.price = price;
+        this.price = description;
+        this.price = urlImg;
+    }
+
+    public String getHomeId() {
+        return homeId;
+    }
+
+    public void setHomeId(String homeId) {
+        this.homeId = homeId;
+    }
+
+    public Home(String homeId) {
+
+        this.homeId = homeId;
+    }
 
     public String getPrice() {
         return price;
