@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         im2 = (ImageView) findViewById(R.id.im2);
         im3 = (ImageView) findViewById(R.id.im3);
         im4 = (ImageView) findViewById(R.id.im4);
+        im4.setColorFilter(ContextCompat.getColor(this, R.color.gray), PorterDuff.Mode.SRC_ATOP);
         im5 = (ImageView) findViewById(R.id.im5);
 
         fragment = new FeedFragment();

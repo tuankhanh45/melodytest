@@ -1,7 +1,9 @@
 package com.example.khanh.melody.More;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     LinearLayout rates;
     LinearLayout calculator;
     LinearLayout help;
+    Intent intent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,6 +33,12 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         rates=(LinearLayout)view.findViewById(R.id.ln_rates);
         calculator=(LinearLayout)view.findViewById(R.id.ln_calculator);
         help=(LinearLayout)view.findViewById(R.id.ln_help);
+        setting.setOnClickListener(this);
+        viewProfile.setOnClickListener(this);
+        qualified.setOnClickListener(this);
+        rates.setOnClickListener(this);
+        calculator.setOnClickListener(this);
+        help.setOnClickListener(this);
         return view;
     }
 
@@ -37,7 +46,9 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_setting:
-
+                Log.d("setting ", "go go");
+                intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.txt_view_profile:
 
