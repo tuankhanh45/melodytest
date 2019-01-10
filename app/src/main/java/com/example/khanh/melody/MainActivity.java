@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.example.khanh.melody.Alerts.AlertsFragment;
 import com.example.khanh.melody.Feed.FeedFragment;
 import com.example.khanh.melody.More.MoreFragment;
-import com.example.khanh.melody.Saved.SavedFragment;
+import com.example.khanh.melody.Search.SearchesFragment;
 import com.example.khanh.melody.Saved.Saved_Fragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 im4.setColorFilter(ContextCompat.getColor(this, R.color.gray), PorterDuff.Mode.SRC_ATOP);
                 im5.setColorFilter(ContextCompat.getColor(this, R.color.gray), PorterDuff.Mode.SRC_ATOP);
 
-                fragment = new com.example.khanh.melody.SearchesFragment();
+                fragment = new SearchesFragment();
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content, fragment);
