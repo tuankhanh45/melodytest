@@ -64,7 +64,6 @@ public class HomeAdapter extends BaseAdapter {
         }
 
         Home item = (Home) getItem(position);
-        String a = item.getUrlImg();
         viewHolder.txtPrice.setText(item.getPrice());
         viewHolder.txtDescription.setText(item.getDescription());
         if (!item.getUrlImg().equals("")) {
