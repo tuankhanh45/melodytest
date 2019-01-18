@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".HomeDetails.HomeDetailsActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +27,7 @@
         <activity
             android:name=".More.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

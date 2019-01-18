@@ -1,6 +1,7 @@
 package com.example.khanh.melody.Feed;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.khanh.melody.HomeDetails.HomeDetailsActivity;
 import com.example.khanh.melody.R;
 import com.example.khanh.melody.Saved.Home;
 import com.squareup.picasso.Picasso;
@@ -47,6 +50,13 @@ public class RecyclerListAdapterHome extends RecyclerView.Adapter<RecyclerListAd
         } else {
             holder.imgHome.setImageResource(R.drawable.v2);
         }
+        holder.lnhomes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, HomeDetailsActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -58,12 +68,14 @@ public class RecyclerListAdapterHome extends RecyclerView.Adapter<RecyclerListAd
         TextView txtPrice;
         TextView txtDescription;
         ImageView imgHome;
+        LinearLayout lnhomes;
 
         public HomeViewHolder(View view) {
             super(view);
             txtPrice = view.findViewById(R.id.txt_price);
             txtDescription = view.findViewById(R.id.txt_title);
             imgHome=view.findViewById(R.id.img_home);
+            lnhomes=(LinearLayout) view.findViewById(R.id.lnhomes);
         }
     }
 }

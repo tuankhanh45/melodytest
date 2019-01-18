@@ -1,8 +1,10 @@
 package com.example.khanh.melody.More;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_more, container, false);
         setting=(ImageView)view.findViewById(R.id.img_setting);
+        setting.setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
         viewProfile=(TextView)view.findViewById(R.id.txt_view_profile);
         qualified=(LinearLayout)view.findViewById(R.id.ln_get_qualified);
         rates=(LinearLayout)view.findViewById(R.id.ln_rates);
