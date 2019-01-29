@@ -1,13 +1,19 @@
 package com.example.khanh.melody.Saved;
 
 
+import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,15 +29,27 @@ import java.util.ArrayList;
 import static com.example.khanh.melody.Ultis.Link.PORT;
 
 
-public class HomesFragment extends Fragment {
+public class HomesFragment extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
 
     ListView lvHomeSave;
+    ProgressDialog mProgressDialog;
+    private View mLoadMoreView;
+    int mPage = 1;
+    boolean isLoadMore = false;
+    SwipeRefreshLayout swipeRefreshLayout;
 
-    com.example.khanh.melody.Saved.HomeAdapter homeAdapter;
-    ArrayList<com.example.khanh.melody.Saved.Home> homeArrayList;
+    HomeAdapter homeAdapter;
+    ArrayList<Home> homeArrayList;
 
     public HomesFragment() {
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        mLoadMoreView = inflater.inflate(R.layout.loading_footer_item, null);
     }
 
     @Override
@@ -39,12 +57,58 @@ public class HomesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_homes, container, false);
         lvHomeSave = (ListView) view.findViewById(R.id.lv_homes_saved);
-
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.sw_homes_saved);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0000CC"));
+        lvHomeSave.setOnScrollListener(this);
+        showProgressDialog();
+        if (lvHomeSave.getFooterViewsCount() <= 0) {
+            lvHomeSave.addFooterView(mLoadMoreView);
+            mLoadMoreView.setVisibility(View.GONE);
+        }
         homeArrayList = new ArrayList<>();
         //creat arrlist home
-        new GetList().execute(PORT + "/api/estate/user-history/20/1", "GET", "");
+        new GetList().execute(PORT + "/api/estate/user-history/20/" + mPage, "GET", "");
 
         return view;
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+        int threshold = 1;
+        int count = lvHomeSave.getCount();
+        if (scrollState == SCROLL_STATE_IDLE) {
+            if (lvHomeSave.getLastVisiblePosition() >= count - threshold) {
+
+                mPage++;
+                isLoadMore = true;
+                mLoadMoreView.setVisibility(View.VISIBLE);
+                lvHomeSave.addFooterView(mLoadMoreView);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        new GetList().execute(PORT + "/api/estate/user-history/20/" + mPage, "GET", "");
+
+                    }
+                }, 1500);
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        mPage = 1;
+        homeArrayList.clear();
+        new GetList().execute(PORT + "/api/estate/user-history/20/" + mPage, "GET", "");
     }
 
     private class GetList extends AsyncTask<String, Void, String> {
@@ -74,6 +138,8 @@ public class HomesFragment extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             if (result.equals("-1")) {
+                swipeRefreshLayout.setRefreshing(false);
+                hideProgressDialog();
                 if (getActivity() != null) {
                     Toast.makeText(getActivity(), "Vui lòng đăng nhập !", Toast.LENGTH_LONG).show();
                 }
@@ -98,8 +164,16 @@ public class HomesFragment extends Fragment {
                             home.setPrice(jsonDoc.optString("price"));
                             homeArrayList.add(home);
                         }
-                        homeAdapter=new HomeAdapter(homeArrayList,getActivity());
-                        lvHomeSave.setAdapter(homeAdapter);
+                        if (isLoadMore == false) {
+                            homeAdapter = new HomeAdapter(homeArrayList, getActivity());
+                            lvHomeSave.setAdapter(homeAdapter);
+                        }
+                        homeAdapter.notifyDataSetChanged();
+
+                        swipeRefreshLayout.setRefreshing(false);
+                        hideProgressDialog();
+                        mLoadMoreView.setVisibility(View.GONE);
+                        lvHomeSave.removeFooterView(mLoadMoreView);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -109,5 +183,21 @@ public class HomesFragment extends Fragment {
         }
 
 
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setMessage("Loading....");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }
