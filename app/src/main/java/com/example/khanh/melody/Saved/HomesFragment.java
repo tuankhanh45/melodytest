@@ -78,24 +78,26 @@ public class HomesFragment extends Fragment implements AbsListView.OnScrollListe
         int threshold = 1;
         int count = lvHomeSave.getCount();
         if (scrollState == SCROLL_STATE_IDLE) {
-            if (lvHomeSave.getLastVisiblePosition() >= count - threshold) {
-
-                mPage++;
-                isLoadMore = true;
-                mLoadMoreView.setVisibility(View.VISIBLE);
-                lvHomeSave.addFooterView(mLoadMoreView);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        new GetList().execute(PORT + "/api/estate/user-history/20/" + mPage, "GET", "");
-
-                    }
-                }, 1500);
-            }
+            if (lvHomeSave.getLastVisiblePosition() >= count - threshold)
+                loadMore();
         }
+    }
+
+    private void loadMore() {
+            mPage++;
+            isLoadMore = true;
+            mLoadMoreView.setVisibility(View.VISIBLE);
+            lvHomeSave.addFooterView(mLoadMoreView);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    new GetList().execute(PORT + "/api/estate/user-history/20/" + mPage, "GET", "");
+
+                }
+            }, 1500);
     }
 
     @Override

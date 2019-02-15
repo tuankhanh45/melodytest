@@ -1,5 +1,6 @@
 package com.example.khanh.melody.Feed;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,6 +43,8 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private SwipeRefreshLayout swipeRefreshLayout;
     int mPage = 1;
 
+    ProgressDialog mProgressDialog;
+    boolean isLoadMore = false;
     boolean isLoading = false;
     private LinearLayoutManager mLayoutManager;
 
@@ -59,7 +62,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rchomes.setLayoutManager(horizontalLayoutManager);
         homeArrayList = new ArrayList<>();
-
+        showProgressDialog();
         //creat arrlist home
         new GetList().execute(PORT + "/api/estate/user-history/20/" + mPage, "GET", "");
 
@@ -98,6 +101,23 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void loadMore() {
+        mPage++;
+        isLoadMore = true;
+        homeArrayList.add(null);
+        homeAdapter.notifyItemInserted(homeArrayList.size() - 1);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                homeArrayList.remove(homeArrayList.size() - 1);
+                int scrollPosition = homeArrayList.size();
+                homeAdapter.notifyItemRemoved(scrollPosition);
+                int currentSize = scrollPosition;
+                int nextLimit = currentSize + 10;
+                new GetList().execute(PORT + "/api/estate/user-history/20/" + mPage, "GET", "");
+
+            }
+        }, 1500);
     }
 
     // refresh view
@@ -159,9 +179,18 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             home.setPrice(jsonDoc.optString("price"));
                             homeArrayList.add(home);
                         }
-                        homeAdapter = new RecyclerListAdapterHome(homeArrayList, getActivity());
+
+                        // new adapter if refreshing
+                        if (isLoadMore == false) {
+                            homeAdapter = new RecyclerListAdapterHome(homeArrayList, getActivity());
+                            rchomes.setAdapter(homeAdapter);
+                        }
+
+                        homeAdapter.notifyDataSetChanged();
                         rchomes.setAdapter(homeAdapter);
                         swipeRefreshLayout.setRefreshing(false);
+                        hideProgressDialog();
+                        isLoading = false;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -169,7 +198,20 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
             }
         }
+    }
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setMessage("Loading....");
+            mProgressDialog.setIndeterminate(true);
+        }
 
+        mProgressDialog.show();
+    }
 
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }

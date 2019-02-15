@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.khanh.melody.HomeDetails.HomeDetailsActivity;
 import com.example.khanh.melody.R;
@@ -21,25 +21,76 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 
-public class RecyclerListAdapterHome extends RecyclerView.Adapter<RecyclerListAdapterHome.HomeViewHolder> {
+public class RecyclerListAdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Home> HomeList;
     Context context;
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_LOADING = 1;
 
     public RecyclerListAdapterHome(List<Home> HomeList, Context context) {
         this.HomeList = HomeList;
         this.context = context;
     }
 
+
+    @NonNull
     @Override
-    public HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //inflate the layout file
-        View HomeView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
-        HomeViewHolder hvh = new HomeViewHolder(HomeView);
-        return hvh;
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_ITEM) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
+            return new HomeViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_loading, parent, false);
+            return new LoadingViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(HomeViewHolder holder, final int position) {
+    public int getItemViewType(int position) {
+        return HomeList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+    }
+
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        if (holder instanceof HomeViewHolder) {
+            populateItemRows((HomeViewHolder) holder, position);
+        } else if (holder instanceof LoadingViewHolder) {
+            showLoadingView((LoadingViewHolder) holder, position);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return HomeList.size();
+    }
+
+    public class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        ProgressBar progressBar;
+
+        public LoadingViewHolder(@NonNull View view) {
+            super(view);
+            progressBar = view.findViewById(R.id.progressBar);
+        }
+    }
+
+    public class HomeViewHolder extends RecyclerView.ViewHolder {
+        TextView txtPrice;
+        TextView txtDescription;
+        ImageView imgHome;
+        LinearLayout lnhomes;
+        public HomeViewHolder(@NonNull View view) {
+            super(view);
+            txtPrice = view.findViewById(R.id.txt_price);
+            txtDescription = view.findViewById(R.id.txt_title);
+            imgHome = view.findViewById(R.id.img_home);
+            lnhomes = (LinearLayout) view.findViewById(R.id.lnhomes);
+        }
+    }
+
+    private void populateItemRows(HomeViewHolder holder, int position) {
 
         Home item = HomeList.get(position);
         holder.txtPrice.setText(item.getPrice());
@@ -58,25 +109,9 @@ public class RecyclerListAdapterHome extends RecyclerView.Adapter<RecyclerListAd
             }
         });
     }
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
+        //ProgressBar would be displayed
 
-    @Override
-    public int getItemCount() {
-        return HomeList.size();
-    }
-
-    public class HomeViewHolder extends RecyclerView.ViewHolder {
-        TextView txtPrice;
-        TextView txtDescription;
-        ImageView imgHome;
-        LinearLayout lnhomes;
-
-        public HomeViewHolder(View view) {
-            super(view);
-            txtPrice = view.findViewById(R.id.txt_price);
-            txtDescription = view.findViewById(R.id.txt_title);
-            imgHome=view.findViewById(R.id.img_home);
-            lnhomes=(LinearLayout) view.findViewById(R.id.lnhomes);
-        }
     }
 }
 

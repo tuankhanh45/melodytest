@@ -46,7 +46,7 @@ public class Http {
 
             httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
             System.setProperty("http.keepAlive", "false");
-            httpURLConnection.setRequestProperty("x-access-token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjlmMmM1MGQxYjk3MDJhMDFkYzNkNWQiLCJlbWFpbCI6Ikprbm9ubzE5OTVAZ21haWwuY29tICIsImlhdCI6MTU0NjY3NTU3MiwiZXhwIjoxNTQ5MjY3NTcyfQ.Q1soMBvAy7M4KqmaruGzxLsO3nk-4tDmtslSJyxLAcY");
+            httpURLConnection.setRequestProperty("x-access-token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjlmMmM1MGQxYjk3MDJhMDFkYzNkNWQiLCJlbWFpbCI6Ikprbm9ubzE5OTVAZ21haWwuY29tICIsImlhdCI6MTU1MDE5NTk2OSwiZXhwIjoxNTUyNzg3OTY5fQ.rj9Smx1elNyR7WvLLAaKI13QvjAXAI5bLqGV9S6UjPc");
             Log.d("token",mSessionManager.getString("token",""));
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
             httpURLConnection.setReadTimeout(10000);
